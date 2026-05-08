@@ -113,7 +113,7 @@
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--rule-soft);
   }
-  .nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
   .wordmark {
     display: flex; align-items: center; gap: 12px;
     line-height: 1;
@@ -128,7 +128,7 @@
     flex-shrink: 0;
   }
   .wordmark img {
-    height: 26px;
+    height: 52px;
     width: auto;
     display: block;
     opacity: 0.92;
@@ -181,6 +181,63 @@
     pointer-events: none;
     overflow: hidden;
   }
+  /* Atmospheric photo behind hero, anchored to the right; faded to charcoal
+     on the left so the headline stays legible. Drifts slowly with parallax. */
+  .hero-bg-photo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 75%;
+    height: 110%;
+    background-image: url("assets/hero.png");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: cover;
+    opacity: 0.55;
+    /* Fade left edge to fully transparent, top/bottom slight vignette */
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+    mask-composite: intersect;
+    will-change: transform;
+  }
+  /* Dark wash sitting ABOVE the photo to dim it further and unify color temp */
+  .hero-bg-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg,
+        rgba(28, 29, 31, 1) 0%,
+        rgba(28, 29, 31, 0.92) 18%,
+        rgba(28, 29, 31, 0.55) 45%,
+        rgba(28, 29, 31, 0.25) 75%,
+        rgba(28, 29, 31, 0.4) 100%),
+      linear-gradient(180deg,
+        rgba(28, 29, 31, 0.6) 0%,
+        rgba(28, 29, 31, 0.15) 30%,
+        rgba(28, 29, 31, 0.15) 70%,
+        rgba(28, 29, 31, 0.7) 100%);
+  }
+  /* On narrow screens, fade more aggressively and shrink the photo so it
+     doesn't compete with the headline. */
+  @media (max-width: 720px) {
+    .hero-bg-photo {
+      width: 100%;
+      opacity: 0.32;
+    }
+    .hero-bg-photo::after {
+      background:
+        linear-gradient(180deg,
+          rgba(28, 29, 31, 0.5) 0%,
+          rgba(28, 29, 31, 0.7) 50%,
+          rgba(28, 29, 31, 0.95) 100%);
+    }
+  }
+
   .hero-bg-disc {
     position: absolute;
     width: 70vmin; height: 70vmin;
@@ -465,29 +522,268 @@
     color: var(--metal-warm);
   }
 
-  /* ---- Products section ---- */
+  /* ---- Case studies (featured large-format work) ---- */
+  .case-studies {
+    display: flex;
+    flex-direction: column;
+    gap: 140px;
+  }
+  @media (max-width: 720px) { .case-studies { gap: 80px; } }
+
+  .case-study {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 64px;
+    align-items: center;
+  }
+  /* Right-side variant flips the columns: image on right, content on left */
+  .case-study[data-side="right"] {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .case-study[data-side="right"] .case-image { order: 2; }
+  .case-study[data-side="right"] .case-content { order: 1; }
+
+  @media (max-width: 900px) {
+    .case-study,
+    .case-study[data-side="right"] {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .case-study[data-side="right"] .case-image { order: 0; }
+    .case-study[data-side="right"] .case-content { order: 0; }
+  }
+
+  .case-image {
+    aspect-ratio: 4 / 3;
+    background: var(--bg-warm);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.35),
+      0 2px 6px rgba(0, 0, 0, 0.5);
+    will-change: box-shadow, transform;
+  }
+  .case-image::before {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(135deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
+      linear-gradient(45deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
+      var(--bg-warm);
+  }
+  .case-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    border-radius: inherit;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  .case-study:hover .case-image img { transform: scale(1.03); }
+
+  .case-content { display: flex; flex-direction: column; }
+
+  .case-meta {
+    display: flex; flex-wrap: wrap; gap: 12px 18px;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .case-num { color: var(--metal-warm); }
+  .case-skill { color: var(--ink-mute); }
+
+  .case-client {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-mute);
+    margin-bottom: 14px;
+  }
+
+  .case-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .case-desc {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.65;
+    max-width: 56ch;
+    margin-bottom: 28px;
+  }
+
+  .case-tags {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--ink-mute);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .case-tags span { position: relative; padding-right: 18px; }
+  .case-tags span:not(:last-child)::after {
+    content: '+'; position: absolute; right: 0;
+    color: var(--metal-warm);
+  }
+
+  /* ---- Products section (full-bleed mega-cards) ---- */
   .products-section {
     border-top: 1px solid var(--rule-soft);
     border-bottom: 1px solid var(--rule-soft);
   }
+  /* The .container inside products-section only wraps the section header now */
+  .products-section .container { position: relative; }
 
-  .products-grid {
+  /* Full-bleed product showcases sit OUTSIDE the .container */
+  .hero-products {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 80px;
+  }
+
+  .hero-product {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 64px 56px;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    border-top: 1px solid var(--rule);
   }
-  @media (max-width: 720px) { .products-grid { grid-template-columns: 1fr; } }
+  .hero-product:first-child { border-top: 1px solid var(--rule); }
+  .hero-product:last-child { border-bottom: 1px solid var(--rule); }
 
-  .product-item .work-image {
+  .hero-product-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
     background: #181a1c;
-    border: 1px solid var(--rule);
   }
-  .product-item .work-image-inner {
+  .hero-product-image::before {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: 0;
     background:
-      linear-gradient(135deg, transparent 49.5%, var(--rule) 49.5%, var(--rule) 50.5%, transparent 50.5%),
-      linear-gradient(45deg, transparent 49.5%, var(--rule) 49.5%, var(--rule) 50.5%, transparent 50.5%),
+      linear-gradient(135deg, transparent 49.5%, rgba(255,255,255,0.05) 49.5%, rgba(255,255,255,0.05) 50.5%, transparent 50.5%),
+      linear-gradient(45deg, transparent 49.5%, rgba(255,255,255,0.05) 49.5%, rgba(255,255,255,0.05) 50.5%, transparent 50.5%),
       #181a1c;
   }
+  .hero-product-image img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    will-change: transform;
+    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .hero-product:hover .hero-product-image img { transform: scale(1.03); }
+
+  /* Dark gradient overlay on the image so text stays legible */
+  .hero-product-image::after {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: 2;
+    background:
+      linear-gradient(180deg,
+        rgba(19, 20, 22, 0.3) 0%,
+        rgba(19, 20, 22, 0.55) 45%,
+        rgba(19, 20, 22, 0.85) 100%);
+  }
+
+  .hero-product-content {
+    position: relative;
+    z-index: 3;
+    align-self: end;
+    width: 100%;
+    padding: 80px 0 80px;
+  }
+  .hero-product-inner {
+    max-width: 720px;
+  }
+
+  .hero-product-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 18px 0 14px;
+  }
+
+  .hero-product-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(16px, 1.6vw, 20px);
+    line-height: 1.4;
+    color: var(--metal-warm);
+    margin-bottom: 28px;
+    letter-spacing: -0.005em;
+  }
+
+  .hero-product-desc {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.65;
+    max-width: 60ch;
+    margin-bottom: 36px;
+  }
+
+  .hero-product-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .hero-product-link {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding: 14px 24px;
+    border: 1px solid var(--metal-warm);
+    color: var(--metal-warm);
+    border-radius: 999px;
+    transition: gap 0.3s, background 0.25s, color 0.25s;
+  }
+  .hero-product-link.primary { background: rgba(216, 200, 168, 0.06); }
+  .hero-product-link:hover {
+    background: var(--metal-warm);
+    color: var(--bg-deep);
+    gap: 18px;
+  }
+
+  .hero-product-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-mute);
+  }
+
+  @media (max-width: 720px) {
+    .hero-product { min-height: auto; }
+    .hero-product-content { padding: 56px 0 56px; }
+  }
+
+  /* ---- Legacy product-grid styles kept for any other consumers ---- */
 
   .product-link {
     display: inline-flex; align-items: center; gap: 10px;
@@ -759,10 +1055,10 @@
     .scroll-fade.in.in-stagger > *:not(.item-fade):nth-child(9) { transition-delay: 0.69s; }
     .scroll-fade.in.in-stagger > *:not(.item-fade):nth-child(10) { transition-delay: 0.77s; }
 
-    /* Per-item reveal: each work/product card "arrives" as it enters the viewport */
-    .work-item {
+    /* Per-item reveal: each case study and hero product "arrives" as it enters view */
+    .case-study, .hero-product {
       opacity: 0;
-      transform: translate3d(0, 80px, 0) scale(0.92);
+      transform: translate3d(0, 80px, 0) scale(0.96);
       filter: blur(8px);
       transition:
         opacity 1.1s cubic-bezier(0.16, 0.84, 0.24, 1),
@@ -770,30 +1066,33 @@
         filter 1.1s cubic-bezier(0.16, 0.84, 0.24, 1);
       will-change: opacity, transform, filter;
     }
-    /* Alternating X drift gives the grid rhythm — left column drifts in from
-       the left, right column from the right. Falls back gracefully to no drift
-       on single-column mobile via the media-query override below. */
-    .work-grid .work-item:nth-child(odd),
-    .products-grid .work-item:nth-child(odd) {
-      transform: translate3d(-40px, 80px, 0) scale(0.92);
+    /* Side-aware drift on case studies: left-aligned cases drift in from left,
+       right-aligned cases drift in from right. */
+    .case-study[data-side="left"] {
+      transform: translate3d(-50px, 80px, 0) scale(0.96);
     }
-    .work-grid .work-item:nth-child(even),
-    .products-grid .work-item:nth-child(even) {
-      transform: translate3d(40px, 80px, 0) scale(0.92);
+    .case-study[data-side="right"] {
+      transform: translate3d(50px, 80px, 0) scale(0.96);
     }
-    @media (max-width: 720px) {
-      .work-grid .work-item:nth-child(odd),
-      .work-grid .work-item:nth-child(even),
-      .products-grid .work-item:nth-child(odd),
-      .products-grid .work-item:nth-child(even) {
-        transform: translate3d(0, 80px, 0) scale(0.92);
+    @media (max-width: 900px) {
+      .case-study[data-side="left"],
+      .case-study[data-side="right"] {
+        transform: translate3d(0, 80px, 0) scale(0.96);
       }
     }
-    .work-item.in {
+    .case-study.in,
+    .hero-product.in {
       opacity: 1 !important;
       transform: translate3d(0, 0, 0) scale(1) !important;
       filter: blur(0) !important;
     }
+    /* Hero products use a less aggressive entrance because they're full-bleed
+       and a heavy entrance feels disorienting. */
+    .hero-product {
+      transform: translate3d(0, 60px, 0) scale(0.985);
+      filter: blur(6px);
+    }
+
     /* Legacy class kept as alias in case it's still on something */
     .item-fade { opacity: 0; transform: translateY(36px) scale(0.985); transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .item-fade.in { opacity: 1; transform: translateY(0) scale(1); }
@@ -802,7 +1101,7 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; animation: none; }
     .scroll-fade, .scroll-fade.in-stagger > * { opacity: 1 !important; transform: none !important; }
-    .work-item, .item-fade { opacity: 1 !important; transform: none !important; }
+    .case-study, .hero-product, .item-fade { opacity: 1 !important; transform: none !important; filter: none !important; }
     [data-parallax] { transform: none !important; }
     .hero-bg-grid, .hero-bg-disc, .hero-bg-rule { transform: none !important; }
   }
@@ -835,6 +1134,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg-layers">
+      <div class="hero-bg-photo" data-parallax="0.18"></div>
       <div class="hero-bg-disc" data-parallax="0.25"></div>
       <div class="hero-bg-rule r1" data-parallax="0.35"></div>
       <div class="hero-bg-rule r2" data-parallax="0.45"></div>
@@ -885,92 +1185,64 @@
           <div class="section-num scroll-fade">01 / Work</div>
         </div>
         <div>
-          <h2 class="section-title scroll-fade">Selected client <span class="accent">engagements.</span></h2>
-          <p class="section-intro scroll-fade">A representative cross-section of products I've designed and engineered for clients — from concept through manufacturing release. Most are still on shelves today.</p>
+          <h2 class="section-title scroll-fade">Selected client <span class="accent">case studies.</span></h2>
+          <p class="section-intro scroll-fade">Four projects, each chosen to demonstrate a distinct capability — from concept-to-shelf appliance work, to flagship consumer electronics, to sole-contributor execution at scale. Most are still on shelves today.</p>
         </div>
       </div>
 
-      <div class="work-grid">
+      <div class="case-studies">
 
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-spark.jpg" alt="FireBoard Spark Smart Thermometer" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>01 / 10</span></div>
-          <h3 class="work-title">Spark Smart Thermometer</h3>
-          <p class="work-desc">The first WiFi and Bluetooth instant-read thermometer with leave-in probe functionality. IP66-rated, designed and engineered for manufacturing in under six months while solving an overmolded TPE-to-cast-aluminum seal on a non-linear parting line. Award winner.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>DFM</span><span>Overmolding</span><span>UI/UX</span></div>
-        </div>
+        <article class="case-study" data-side="left">
+          <div class="case-image">
+            <img src="assets/work-fireboard-ring-drive.jpg" alt="FireBoard Ring Drive Smoker Conversion" loading="lazy">
+          </div>
+          <div class="case-content">
+            <div class="case-meta"><span class="case-num">01 / 04</span><span class="case-skill">Concept → Manufacturing</span></div>
+            <p class="case-client">FireBoard</p>
+            <h3 class="case-title">Ring Drive Smoker Conversion</h3>
+            <p class="case-desc">FireBoard's first appliance product — a 360° air-delivery system that converts a standard 22" charcoal grill into a full smoker. Conceived, prototyped, designed, tested, and brought through manufacturing as sole contributor. Combines extruded and stretch-formed aluminum, stamped sheet metal, and injection molding.</p>
+            <div class="case-tags"><span>Concept</span><span>Engineering</span><span>Multi-Process Manufacturing</span><span>Sole Contributor</span></div>
+          </div>
+        </article>
 
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-pulse.jpg" alt="FireBoard Pulse Wireless Probe" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>03 / 10</span></div>
-          <h3 class="work-title">Pulse Wireless Probe</h3>
-          <p class="work-desc">The first dual-band wireless thermometer combining sub-1GHz and BLE connectivity. Ceramic and stainless steel construction, hexagonal probe geometry to minimize meat punctures. Includes a stackable charger with pass-through magnetic contacts.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Engineering</span><span>Mechanism Design</span></div>
-        </div>
+        <article class="case-study" data-side="right">
+          <div class="case-image">
+            <img src="assets/work-fireboard-pulse.jpg" alt="FireBoard Pulse Wireless Probe" loading="lazy">
+          </div>
+          <div class="case-content">
+            <div class="case-meta"><span class="case-num">02 / 04</span><span class="case-skill">Wireless + Mechanism Design</span></div>
+            <p class="case-client">FireBoard</p>
+            <h3 class="case-title">Pulse Wireless Probe</h3>
+            <p class="case-desc">The first dual-band wireless thermometer combining sub-1GHz and BLE connectivity. Ceramic and stainless steel construction, hexagonal probe geometry to minimize meat punctures. Includes a stackable charger with pass-through magnetic contacts.</p>
+            <div class="case-tags"><span>Industrial Design</span><span>Engineering</span><span>Mechanism Design</span><span>Materials</span></div>
+          </div>
+        </article>
 
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-pellet-drive.jpg" alt="FireBoard Pellet Drive Controller" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>04 / 10</span></div>
-          <h3 class="work-title">Pellet Drive Controller</h3>
-          <p class="work-desc">A bolt-on controller replacing OEM control units on most pellet smokers. Engineered to reuse existing molds with targeted modifications — a compressed silicone gasket seals waterproof, and IML on the display window enables sonic-welded assembly with an angled PCB mounting that wouldn't otherwise be possible.</p>
-          <div class="work-tags"><span>DFM</span><span>Mold Modification</span><span>IML</span><span>Sonic Welding</span></div>
-        </div>
+        <article class="case-study" data-side="left">
+          <div class="case-image">
+            <img src="assets/work-fireboard-spark.jpg" alt="FireBoard Spark Smart Thermometer" loading="lazy">
+          </div>
+          <div class="case-content">
+            <div class="case-meta"><span class="case-num">03 / 04</span><span class="case-skill">Award-winning Consumer Electronics</span></div>
+            <p class="case-client">FireBoard</p>
+            <h3 class="case-title">Spark Smart Thermometer</h3>
+            <p class="case-desc">The first WiFi and Bluetooth instant-read thermometer with leave-in probe functionality. IP66-rated, designed and engineered for manufacturing in under six months while solving an overmolded TPE-to-cast-aluminum seal on a non-linear parting line. Award winner.</p>
+            <div class="case-tags"><span>Industrial Design</span><span>DFM</span><span>Overmolding</span><span>UI/UX</span></div>
+          </div>
+        </article>
 
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-ring-drive.jpg" alt="FireBoard Ring Drive Smoker Conversion" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>05 / 10</span></div>
-          <h3 class="work-title">Ring Drive Smoker Conversion</h3>
-          <p class="work-desc">FireBoard's first appliance product — a 360° air-delivery system that converts a standard 22" charcoal grill into a full smoker. Conceived, prototyped, designed, tested, and brought through manufacturing as sole contributor. Combines extruded and stretch-formed aluminum, stamped sheet metal, and injection molding.</p>
-          <div class="work-tags"><span>Concept</span><span>Engineering</span><span>Manufacturing</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-beacon.jpg" alt="FireBoard Beacon Sensor" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>06 / 10</span></div>
-          <h3 class="work-title">Beacon Sensor</h3>
-          <p class="work-desc">FireBoard's first sub-1GHz sensor for commercial walk-in cooler and freezer monitoring. Fully waterproof TPE overmolded body with magnetic mounting clip and precisely located temperature and humidity sensors. External probe port for extended ranges.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Overmolding</span><span>Sensor Integration</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-g3-blower.jpg" alt="FireBoard G3 Blower" loading="lazy"></div>
-          <div class="work-meta"><span>FireBoard</span><span>07 / 10</span></div>
-          <h3 class="work-title">G3 Blower</h3>
-          <p class="work-desc">A redesign of FireBoard's most popular Drive system. Stainless steel frame, glass-filled nylon weather shield engineered for the heat and durability required at the firebox. Substantial reliability improvement over the original.</p>
-          <div class="work-tags"><span>Redesign</span><span>Materials</span><span>DFM</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-ubecube.jpg" alt="UbeCube Modular Storage System" loading="lazy"></div>
-          <div class="work-meta"><span>UbeCube</span><span>02 / 10</span></div>
-          <h3 class="work-title">Modular Storage System</h3>
-          <p class="work-desc">A ground-up modular storage system inspired by the milk crate, optimized for cubic stacking and collapsible shipping. Roughly 60 parts and molds spanning injection molding, expanded foam, blow molding, CNC, and RF-welded soft goods — all delivered as sole contributor.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Engineering</span><span>Soft Goods</span><span>Sourcing</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-castle-mamba-monster-x8s.jpg" alt="Castle Creations Mamba Monster X8S ESC" loading="lazy"></div>
-          <div class="work-meta"><span>Castle Creations</span><span>08 / 10</span></div>
-          <h3 class="work-title">Mamba Monster X8S ESC</h3>
-          <p class="work-desc">A high-power electronic speed controller for large RC vehicles. Visual cues pulled from the successful Mamba X line to extend brand value. Introduced a forged heatsink — a new manufacturing method for Castle products at the time.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Brand Continuity</span><span>Forging</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-castle-sidewinder-4.jpg" alt="Castle Creations Sidewinder 4 ESC" loading="lazy"></div>
-          <div class="work-meta"><span>Castle Creations</span><span>09 / 10</span></div>
-          <h3 class="work-title">Sidewinder 4 ESC</h3>
-          <p class="work-desc">Refresh of an existing speed controller line. Larger cooling fan and functional venting yielded over 40% better run times and higher load capacity — the gain became a standard product feature called Cryo-Drive.</p>
-          <div class="work-tags"><span>Thermal Design</span><span>Performance</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-lindsay-pivot-watch.jpg" alt="Lindsay FieldNET Pivot Watch" loading="lazy"></div>
-          <div class="work-meta"><span>Lindsay</span><span>10 / 10</span></div>
-          <h3 class="work-title">FieldNET Pivot Watch</h3>
-          <p class="work-desc">An app-connected crop irrigation monitor. The mounting solution accommodates a wide range of pivot arm diameters and any wires or piping already installed. Multiple concept rounds resulted in the final shipped design.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Agricultural</span><span>Mounting Systems</span></div>
-        </div>
+        <article class="case-study" data-side="right">
+          <div class="case-image">
+            <img src="assets/work-ubecube.jpg" alt="UbeCube Modular Storage System" loading="lazy">
+          </div>
+          <div class="case-content">
+            <div class="case-meta"><span class="case-num">04 / 04</span><span class="case-skill">Sole Contributor at Scale</span></div>
+            <p class="case-client">UbeCube</p>
+            <h3 class="case-title">Modular Storage System</h3>
+            <p class="case-desc">A ground-up modular storage system inspired by the milk crate, optimized for cubic stacking and collapsible shipping. Roughly 60 parts and molds spanning injection molding, expanded foam, blow molding, CNC, and RF-welded soft goods — all delivered as sole contributor.</p>
+            <div class="case-tags"><span>Industrial Design</span><span>Engineering</span><span>Soft Goods</span><span>Sourcing</span></div>
+          </div>
+        </article>
 
       </div>
     </div>
@@ -988,27 +1260,49 @@
           <p class="section-intro scroll-fade">I don't only design products for clients. I invent, engineer, manufacture, sell, and support my own — the same playbook, with my own skin in the game. It's the difference between a designer who hands off files and a partner who knows what happens after he leaves the building.</p>
         </div>
       </div>
+    </div>
 
-      <div class="products-grid">
+    <div class="hero-products">
 
-        <div class="work-item product-item">
-          <div class="work-image"><img src="assets/product-softcrutch.jpg" alt="SoftCrutch crutch accessory kit" loading="lazy"></div>
-          <div class="work-meta"><span>Live · Amazon &amp; D2C</span><span>01 / 02</span></div>
-          <span class="product-status">● Shipping</span>
-          <h3 class="work-title">SoftCrutch</h3>
-          <p class="work-desc">A crutch accessory kit that converts standard underarm and forearm crutches into a more comfortable, lower-pressure mobility experience. Designed, engineered, sourced, and brought to market end-to-end by me. Patent pending. Live on Amazon, with a growing base of clinical-user testimonials.</p>
-          <a href="https://softcrutch.com" class="product-link" target="_blank" rel="noopener">Visit softcrutch.com →</a>
+      <article class="hero-product" data-status="shipping">
+        <div class="hero-product-image">
+          <img src="assets/product-softcrutch.jpg" alt="SoftCrutch crutch accessory kit" loading="lazy">
         </div>
-
-        <div class="work-item product-item">
-          <div class="work-image"><img src="assets/product-yumekeki.jpg" alt="YumeKeki fillable cupcake mold system" loading="lazy"></div>
-          <div class="work-meta"><span>In Validation</span><span>02 / 02</span></div>
-          <span class="product-status">○ In Development</span>
-          <h3 class="work-title">YumeKeki</h3>
-          <p class="work-desc">A fillable cupcake mold system for home bakers and creators. Currently in market validation using AI-generated content marketing before I commit to manufacturing — a deliberate, low-capital approach to demand discovery before tooling.</p>
+        <div class="hero-product-content">
+          <div class="container">
+            <div class="hero-product-inner">
+              <span class="product-status">● Shipping</span>
+              <h3 class="hero-product-title">SoftCrutch</h3>
+              <p class="hero-product-tagline">A crutch accessory kit, end-to-end.</p>
+              <p class="hero-product-desc">Converts standard underarm and forearm crutches into a more comfortable, lower-pressure mobility experience. Designed, engineered, sourced, and brought to market end-to-end by me. Patent pending. Live on Amazon, with a growing base of clinical-user testimonials.</p>
+              <div class="hero-product-actions">
+                <a href="https://softcrutch.com" class="hero-product-link primary" target="_blank" rel="noopener">Visit softcrutch.com →</a>
+                <span class="hero-product-meta">Live · Amazon &amp; D2C</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </article>
 
-      </div>
+      <article class="hero-product" data-status="development">
+        <div class="hero-product-image">
+          <img src="assets/product-yumekeki.jpg" alt="YumeKeki fillable cupcake mold system" loading="lazy">
+        </div>
+        <div class="hero-product-content">
+          <div class="container">
+            <div class="hero-product-inner">
+              <span class="product-status">○ In Development</span>
+              <h3 class="hero-product-title">YumeKeki</h3>
+              <p class="hero-product-tagline">Fillable cupcake molds, validated before tooled.</p>
+              <p class="hero-product-desc">A fillable cupcake mold system for home bakers and creators. Currently in market validation using AI-generated content marketing before I commit to manufacturing — a deliberate, low-capital approach to demand discovery before tooling.</p>
+              <div class="hero-product-actions">
+                <span class="hero-product-meta">In Validation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
     </div>
   </section>
 
@@ -1162,14 +1456,14 @@
       });
     }, { threshold: 0 });
 
-    document.querySelectorAll('.work-item').forEach((el) => {
+    document.querySelectorAll('.case-study, .hero-product').forEach((el) => {
       itemObs.observe(el);
       resetObs.observe(el);
     });
   } else {
     // Fallback (no IntersectionObserver, or user prefers reduced motion):
     // make everything visible immediately.
-    document.querySelectorAll('.scroll-fade, .work-item').forEach((el) => el.classList.add('in'));
+    document.querySelectorAll('.scroll-fade, .case-study, .hero-product').forEach((el) => el.classList.add('in'));
   }
 
   // ---- Parallax (rAF-based, GPU transforms only) ----
@@ -1179,7 +1473,9 @@
       speed: parseFloat(el.dataset.parallax) || 0,
     }));
 
-    const workImages = Array.from(document.querySelectorAll('.work-image')).map((el) => ({ el }));
+    // Track all "lift-on-scroll" image elements: case study images.
+    // (Hero products are full-bleed and use their own subtle hover scale, no lift.)
+    const liftImages = Array.from(document.querySelectorAll('.case-image')).map((el) => ({ el }));
 
     let ticking = false;
     const update = () => {
@@ -1194,35 +1490,30 @@
         }
       });
 
-      // Work image parallax lift: as the card center approaches the viewport
+      // Case-study image lift: as the card center approaches the viewport
       // center, the image scales up, drifts slightly upward, and its drop
       // shadow grows + softens — making it feel like it's lifting off the page.
-      // The shadow itself follows a small parallax offset for depth.
-      workImages.forEach(({ el }) => {
+      liftImages.forEach(({ el }) => {
         const rect = el.getBoundingClientRect();
         if (rect.bottom > -100 && rect.top < vh + 100) {
-          // -1 (card below viewport) → 0 (centered) → 1 (card above viewport)
           const cardCenter = rect.top + rect.height / 2;
           const distFromCenter = (cardCenter - vh / 2) / (vh / 2);
-          // Lift factor: 1 at center, 0 at edges
           const lift = Math.max(0, 1 - Math.abs(distFromCenter));
 
-          // Scale: up to 4% larger when centered
           const scale = 1 + lift * 0.04;
-          // Y offset: image lifts up to 8px when centered
           const yLift = -lift * 8;
-          // Shadow grows + softens with lift; offset shifts slightly with parallax
           const shadowY1 = 8 + lift * 28;
           const shadowBlur1 = 20 + lift * 50;
           const shadowAlpha1 = 0.35 + lift * 0.25;
           const shadowY2 = 2 + lift * 8;
           const shadowBlur2 = 6 + lift * 14;
           const shadowAlpha2 = 0.4 + lift * 0.15;
-          // Subtle horizontal parallax on shadow (drifts opposite scroll direction)
           const shadowX = distFromCenter * 4;
 
           const img = el.querySelector('img');
-          if (img && !el.matches(':hover')) {
+          // The case-study card is the parent of .case-image; hover lives there.
+          const card = el.closest('.case-study');
+          if (img && !(card && card.matches(':hover'))) {
             img.style.transform = `translate3d(0, ${yLift.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
           }
           el.style.boxShadow =
