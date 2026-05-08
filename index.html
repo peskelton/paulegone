@@ -369,6 +369,31 @@
     border: 1px solid var(--rule);
     transform: translateZ(0);
   }
+  .work-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  .work-item:hover .work-image img {
+    transform: scale(1.04);
+  }
+  /* Graceful fallback: if an image fails to load, show the diagonal-cross
+     placeholder pattern in its place via the parent's background. */
+  .work-image::before {
+    content: '';
+    position: absolute; inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(135deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
+      linear-gradient(45deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
+      var(--bg-warm);
+  }
+  .work-image img { z-index: 1; }
   .work-image-inner {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
@@ -860,7 +885,7 @@
       <div class="work-grid">
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard Spark</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-spark.jpg" alt="FireBoard Spark Smart Thermometer" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>01 / 10</span></div>
           <h3 class="work-title">Spark Smart Thermometer</h3>
           <p class="work-desc">The first WiFi and Bluetooth instant-read thermometer with leave-in probe functionality. IP66-rated, designed and engineered for manufacturing in under six months while solving an overmolded TPE-to-cast-aluminum seal on a non-linear parting line. Award winner.</p>
@@ -868,7 +893,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">UbeCube System</div></div>
+          <div class="work-image"><img src="assets/work-ubecube.jpg" alt="UbeCube Modular Storage System" loading="lazy"></div>
           <div class="work-meta"><span>UbeCube</span><span>02 / 10</span></div>
           <h3 class="work-title">Modular Storage System</h3>
           <p class="work-desc">A ground-up modular storage system inspired by the milk crate, optimized for cubic stacking and collapsible shipping. Roughly 60 parts and molds spanning injection molding, expanded foam, blow molding, CNC, and RF-welded soft goods — all delivered as sole contributor.</p>
@@ -876,7 +901,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard Pulse</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-pulse.jpg" alt="FireBoard Pulse Wireless Probe" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>03 / 10</span></div>
           <h3 class="work-title">Pulse Wireless Probe</h3>
           <p class="work-desc">The first dual-band wireless thermometer combining sub-1GHz and BLE connectivity. Ceramic and stainless steel construction, hexagonal probe geometry to minimize meat punctures. Includes a stackable charger with pass-through magnetic contacts.</p>
@@ -884,7 +909,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard Pellet Drive</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-pellet-drive.jpg" alt="FireBoard Pellet Drive Controller" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>04 / 10</span></div>
           <h3 class="work-title">Pellet Drive Controller</h3>
           <p class="work-desc">A bolt-on controller replacing OEM control units on most pellet smokers. Engineered to reuse existing molds with targeted modifications — a compressed silicone gasket seals waterproof, and IML on the display window enables sonic-welded assembly with an angled PCB mounting that wouldn't otherwise be possible.</p>
@@ -892,7 +917,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard Ring Drive</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-ring-drive.jpg" alt="FireBoard Ring Drive Smoker Conversion" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>05 / 10</span></div>
           <h3 class="work-title">Ring Drive Smoker Conversion</h3>
           <p class="work-desc">FireBoard's first appliance product — a 360° air-delivery system that converts a standard 22" charcoal grill into a full smoker. Conceived, prototyped, designed, tested, and brought through manufacturing as sole contributor. Combines extruded and stretch-formed aluminum, stamped sheet metal, and injection molding.</p>
@@ -900,7 +925,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard Beacon</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-beacon.jpg" alt="FireBoard Beacon Sensor" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>06 / 10</span></div>
           <h3 class="work-title">Beacon Sensor</h3>
           <p class="work-desc">FireBoard's first sub-1GHz sensor for commercial walk-in cooler and freezer monitoring. Fully waterproof TPE overmolded body with magnetic mounting clip and precisely located temperature and humidity sensors. External probe port for extended ranges.</p>
@@ -908,7 +933,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">FireBoard G3 Blower</div></div>
+          <div class="work-image"><img src="assets/work-fireboard-g3-blower.jpg" alt="FireBoard G3 Blower" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>07 / 10</span></div>
           <h3 class="work-title">G3 Blower</h3>
           <p class="work-desc">A redesign of FireBoard's most popular Drive system. Stainless steel frame, glass-filled nylon weather shield engineered for the heat and durability required at the firebox. Substantial reliability improvement over the original.</p>
@@ -916,7 +941,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">Castle Mamba Monster X8S</div></div>
+          <div class="work-image"><img src="assets/work-castle-mamba-monster-x8s.jpg" alt="Castle Creations Mamba Monster X8S ESC" loading="lazy"></div>
           <div class="work-meta"><span>Castle Creations</span><span>08 / 10</span></div>
           <h3 class="work-title">Mamba Monster X8S ESC</h3>
           <p class="work-desc">A high-power electronic speed controller for large RC vehicles. Visual cues pulled from the successful Mamba X line to extend brand value. Introduced a forged heatsink — a new manufacturing method for Castle products at the time.</p>
@@ -924,7 +949,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">Castle Sidewinder 4</div></div>
+          <div class="work-image"><img src="assets/work-castle-sidewinder-4.jpg" alt="Castle Creations Sidewinder 4 ESC" loading="lazy"></div>
           <div class="work-meta"><span>Castle Creations</span><span>09 / 10</span></div>
           <h3 class="work-title">Sidewinder 4 ESC</h3>
           <p class="work-desc">Refresh of an existing speed controller line. Larger cooling fan and functional venting yielded over 40% better run times and higher load capacity — the gain became a standard product feature called Cryo-Drive.</p>
@@ -932,7 +957,7 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><div class="work-image-inner">Lindsay Pivot Watch</div></div>
+          <div class="work-image"><img src="assets/work-lindsay-pivot-watch.jpg" alt="Lindsay FieldNET Pivot Watch" loading="lazy"></div>
           <div class="work-meta"><span>Lindsay</span><span>10 / 10</span></div>
           <h3 class="work-title">FieldNET Pivot Watch</h3>
           <p class="work-desc">An app-connected crop irrigation monitor. The mounting solution accommodates a wide range of pivot arm diameters and any wires or piping already installed. Multiple concept rounds resulted in the final shipped design.</p>
@@ -959,7 +984,7 @@
       <div class="products-grid">
 
         <div class="work-item product-item">
-          <div class="work-image"><div class="work-image-inner">SoftCrutch</div></div>
+          <div class="work-image"><img src="assets/product-softcrutch.jpg" alt="SoftCrutch crutch accessory kit" loading="lazy"></div>
           <div class="work-meta"><span>Live · Amazon &amp; D2C</span><span>01 / 02</span></div>
           <span class="product-status">● Shipping</span>
           <h3 class="work-title">SoftCrutch</h3>
@@ -968,7 +993,7 @@
         </div>
 
         <div class="work-item product-item">
-          <div class="work-image"><div class="work-image-inner">YumeKeki</div></div>
+          <div class="work-image"><img src="assets/product-yumekeki.jpg" alt="YumeKeki fillable cupcake mold system" loading="lazy"></div>
           <div class="work-meta"><span>In Validation</span><span>02 / 02</span></div>
           <span class="product-status">○ In Development</span>
           <h3 class="work-title">YumeKeki</h3>
@@ -1168,7 +1193,7 @@
           const progress = 1 - (rect.top + rect.height / 2) / vh;
           const clamped = Math.max(-0.5, Math.min(1.5, progress));
           const scale = 1 + clamped * 0.04;
-          const inner = el.querySelector('.work-image-inner');
+          const inner = el.querySelector('img') || el.querySelector('.work-image-inner');
           if (inner && !el.matches(':hover')) {
             inner.style.transform = `scale(${scale.toFixed(3)})`;
           }
