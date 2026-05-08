@@ -367,7 +367,13 @@
     position: relative;
     overflow: hidden;
     border: 1px solid var(--rule);
+    border-radius: 14px;
     transform: translateZ(0);
+    /* Initial soft shadow — gets dynamically updated by scroll handler. */
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.25),
+      0 1px 3px rgba(0, 0, 0, 0.4);
+    will-change: box-shadow, transform;
   }
   .work-image img {
     position: absolute;
@@ -376,6 +382,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: inherit;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform;
   }
@@ -388,6 +395,7 @@
     content: '';
     position: absolute; inset: 0;
     z-index: 0;
+    border-radius: inherit;
     background:
       linear-gradient(135deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
       linear-gradient(45deg, transparent 49.5%, var(--rule-soft) 49.5%, var(--rule-soft) 50.5%, transparent 50.5%),
@@ -893,7 +901,15 @@
         </div>
 
         <div class="work-item">
-          <div class="work-image"><img src="assets/work-fireboard-pulse.jpg alt="FireBoard Pulse Wireless Probe" loading="lazy"></div>
+          <div class="work-image"><img src="assets/work-ubecube.jpg" alt="UbeCube Modular Storage System" loading="lazy"></div>
+          <div class="work-meta"><span>UbeCube</span><span>02 / 10</span></div>
+          <h3 class="work-title">Modular Storage System</h3>
+          <p class="work-desc">A ground-up modular storage system inspired by the milk crate, optimized for cubic stacking and collapsible shipping. Roughly 60 parts and molds spanning injection molding, expanded foam, blow molding, CNC, and RF-welded soft goods — all delivered as sole contributor.</p>
+          <div class="work-tags"><span>Industrial Design</span><span>Engineering</span><span>Soft Goods</span><span>Sourcing</span></div>
+        </div>
+
+        <div class="work-item">
+          <div class="work-image"><img src="assets/work-fireboard-pulse.jpg" alt="FireBoard Pulse Wireless Probe" loading="lazy"></div>
           <div class="work-meta"><span>FireBoard</span><span>03 / 10</span></div>
           <h3 class="work-title">Pulse Wireless Probe</h3>
           <p class="work-desc">The first dual-band wireless thermometer combining sub-1GHz and BLE connectivity. Ceramic and stainless steel construction, hexagonal probe geometry to minimize meat punctures. Includes a stackable charger with pass-through magnetic contacts.</p>
@@ -930,14 +946,6 @@
           <h3 class="work-title">G3 Blower</h3>
           <p class="work-desc">A redesign of FireBoard's most popular Drive system. Stainless steel frame, glass-filled nylon weather shield engineered for the heat and durability required at the firebox. Substantial reliability improvement over the original.</p>
           <div class="work-tags"><span>Redesign</span><span>Materials</span><span>DFM</span></div>
-        </div>
-
-        <div class="work-item">
-          <div class="work-image"><img src="assets/work-ubecube.jpg" alt="UbeCube Modular Storage System" loading="lazy"></div>
-          <div class="work-meta"><span>UbeCube</span><span>02 / 10</span></div>
-          <h3 class="work-title">Modular Storage System</h3>
-          <p class="work-desc">A ground-up modular storage system inspired by the milk crate, optimized for cubic stacking and collapsible shipping. Roughly 60 parts and molds spanning injection molding, expanded foam, blow molding, CNC, and RF-welded soft goods — all delivered as sole contributor.</p>
-          <div class="work-tags"><span>Industrial Design</span><span>Engineering</span><span>Soft Goods</span><span>Sourcing</span></div>
         </div>
 
         <div class="work-item">
@@ -1186,17 +1194,40 @@
         }
       });
 
-      // Work image scale-on-scroll: subtle zoom as the card enters/exits
+      // Work image parallax lift: as the card center approaches the viewport
+      // center, the image scales up, drifts slightly upward, and its drop
+      // shadow grows + softens — making it feel like it's lifting off the page.
+      // The shadow itself follows a small parallax offset for depth.
       workImages.forEach(({ el }) => {
         const rect = el.getBoundingClientRect();
-        if (rect.bottom > 0 && rect.top < vh) {
-          const progress = 1 - (rect.top + rect.height / 2) / vh;
-          const clamped = Math.max(-0.5, Math.min(1.5, progress));
-          const scale = 1 + clamped * 0.04;
-          const inner = el.querySelector('img') || el.querySelector('.work-image-inner');
-          if (inner && !el.matches(':hover')) {
-            inner.style.transform = `scale(${scale.toFixed(3)})`;
+        if (rect.bottom > -100 && rect.top < vh + 100) {
+          // -1 (card below viewport) → 0 (centered) → 1 (card above viewport)
+          const cardCenter = rect.top + rect.height / 2;
+          const distFromCenter = (cardCenter - vh / 2) / (vh / 2);
+          // Lift factor: 1 at center, 0 at edges
+          const lift = Math.max(0, 1 - Math.abs(distFromCenter));
+
+          // Scale: up to 4% larger when centered
+          const scale = 1 + lift * 0.04;
+          // Y offset: image lifts up to 8px when centered
+          const yLift = -lift * 8;
+          // Shadow grows + softens with lift; offset shifts slightly with parallax
+          const shadowY1 = 8 + lift * 28;
+          const shadowBlur1 = 20 + lift * 50;
+          const shadowAlpha1 = 0.35 + lift * 0.25;
+          const shadowY2 = 2 + lift * 8;
+          const shadowBlur2 = 6 + lift * 14;
+          const shadowAlpha2 = 0.4 + lift * 0.15;
+          // Subtle horizontal parallax on shadow (drifts opposite scroll direction)
+          const shadowX = distFromCenter * 4;
+
+          const img = el.querySelector('img');
+          if (img && !el.matches(':hover')) {
+            img.style.transform = `translate3d(0, ${yLift.toFixed(2)}px, 0) scale(${scale.toFixed(3)})`;
           }
+          el.style.boxShadow =
+            `${shadowX.toFixed(1)}px ${shadowY1.toFixed(1)}px ${shadowBlur1.toFixed(1)}px rgba(0, 0, 0, ${shadowAlpha1.toFixed(2)}),` +
+            `${(shadowX * 0.3).toFixed(1)}px ${shadowY2.toFixed(1)}px ${shadowBlur2.toFixed(1)}px rgba(0, 0, 0, ${shadowAlpha2.toFixed(2)})`;
         }
       });
 
