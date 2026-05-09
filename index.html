@@ -209,7 +209,7 @@
   .nav-mobile-cta { display: none; }
   @media (max-width: 520px) { .nav-mobile-cta { display: inline; } }
 
-  /* ---- Hero ---- */
+/* ---- Hero ---- */
   .hero {
     min-height: 100vh;
     padding: 120px 0 80px;
@@ -217,91 +217,65 @@
     position: relative;
     overflow: hidden;
   }
-
   /* Layered depth elements behind hero text */
   .hero-bg-layers {
     position: absolute; inset: 0;
     pointer-events: none;
     overflow: hidden;
   }
-  /* Atmospheric photo behind hero, anchored to the right; faded to charcoal
-     on the left so the headline stays legible. Drifts slowly with parallax. */
+  /* Atmospheric photo behind hero, fills the full width with a soft fade
+     on the far left for headline legibility. Drifts slowly with parallax. */
   .hero-bg-photo {
     position: absolute;
     top: 0;
     right: 0;
-    width: 75%;
+    width: 100%;
     height: 110%;
     background-image: url("assets/hero.png");
     background-repeat: no-repeat;
     background-position: right center;
     background-size: cover;
-    opacity: 0.35;
-    /* Fade left edge to transparent, top/bottom slight vignette */
+    opacity: 0.85;
+    /* Soft fade on the far left edge only, gentle top/bottom vignette */
     -webkit-mask-image:
-      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 15%, #000 35%, #000 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, #000 8%, #000 92%, rgba(0,0,0,0.4) 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 15%, #000 35%, #000 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, #000 8%, #000 92%, rgba(0,0,0,0.4) 100%);
     mask-composite: intersect;
     will-change: transform;
   }
-/* Atmospheric photo behind hero, anchored to the right; faded to charcoal
-     on the left so the headline stays legible. Drifts slowly with parallax. */
-  .hero-bg-photo {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 75%;
-    height: 110%;
-    background-image: url("assets/hero.png");
-    background-repeat: no-repeat;
-    background-position: right center;
-    background-size: cover;
-    opacity: 0.75;
-    /* Fade left edge to fully transparent, top/bottom slight vignette */
-    -webkit-mask-image:
-      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
-    mask-composite: intersect;
-    will-change: transform;
-  }
-  /* Dark wash sitting ABOVE the photo to dim it further and unify color temp */
+  /* Soft wash above the photo — much lighter so the image breathes */
   .hero-bg-photo::after {
     content: '';
     position: absolute; inset: 0;
     background:
       linear-gradient(90deg,
-        rgba(28, 29, 31, 1) 0%,
-        rgba(28, 29, 31, 0.92) 18%,
-        rgba(28, 29, 31, 0.65) 45%,
-        rgba(28, 29, 31, 0.4) 75%,
-        rgba(28, 29, 31, 0.25) 100%),
+        rgba(28, 29, 31, 0.65) 0%,
+        rgba(28, 29, 31, 0.45) 18%,
+        rgba(28, 29, 31, 0.2) 45%,
+        rgba(28, 29, 31, 0.05) 75%,
+        rgba(28, 29, 31, 0.1) 100%),
       linear-gradient(180deg,
-        rgba(28, 29, 31, 0.3) 0%,
-        rgba(28, 29, 31, 0.05) 30%,
-        rgba(28, 29, 31, 0.05) 70%,
-        rgba(28, 29, 31, 0.45) 100%);
+        rgba(28, 29, 31, 0.15) 0%,
+        rgba(28, 29, 31, 0) 25%,
+        rgba(28, 29, 31, 0) 75%,
+        rgba(28, 29, 31, 0.3) 100%);
   }
-  /* On narrow screens, fade more aggressively and shrink the photo so it
-     doesn't compete with the headline. */
+  /* Mobile: full-width photo with stronger vertical wash for headline legibility */
   @media (max-width: 720px) {
     .hero-bg-photo {
       width: 100%;
-      opacity: 0.75;
+      opacity: 0.85;
     }
     .hero-bg-photo::after {
       background:
         linear-gradient(180deg,
-          rgba(28, 29, 31, 0.2) 0%,
-          rgba(28, 29, 31, 0.35) 50%,
-          rgba(28, 29, 31, 0.65) 100%);
+          rgba(28, 29, 31, 0.15) 0%,
+          rgba(28, 29, 31, 0.3) 50%,
+          rgba(28, 29, 31, 0.55) 100%);
     }
   }
 
