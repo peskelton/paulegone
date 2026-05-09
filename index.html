@@ -236,15 +236,15 @@
     background-repeat: no-repeat;
     background-position: right center;
     background-size: cover;
-    opacity: 0.55;
-    /* Fade left edge to fully transparent, top/bottom slight vignette */
+    opacity: 0.35;
+    /* Fade left edge to transparent, top/bottom slight vignette */
     -webkit-mask-image:
-      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
     mask-composite: intersect;
     will-change: transform;
   }
@@ -263,12 +263,12 @@
     opacity: 0.75;
     /* Fade left edge to fully transparent, top/bottom slight vignette */
     -webkit-mask-image:
-      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
-      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      linear-gradient(90deg, transparent 20%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 20%, #000 12%, #000 88%, transparent 100%);
     mask-composite: intersect;
     will-change: transform;
   }
