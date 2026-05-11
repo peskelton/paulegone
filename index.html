@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>paulégoné — Industrial Design & Product Development</title>
-<meta name="description" content="Paulegone is an industrial design and product development firm. 22 years of shipped products, from sketch to shelf — for clients, and under our own brand.">
+<meta name="description" content="Paulégoné is a product development company. I ship products — mine, and yours. 22 years of shipped products across consumer electronics, sporting goods, agriculture, and medical accessories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -209,7 +209,7 @@
   .nav-mobile-cta { display: none; }
   @media (max-width: 520px) { .nav-mobile-cta { display: inline; } }
 
-/* ---- Hero ---- */
+  /* ---- Hero ---- */
   .hero {
     min-height: 100vh;
     padding: 120px 0 80px;
@@ -217,65 +217,67 @@
     position: relative;
     overflow: hidden;
   }
+
   /* Layered depth elements behind hero text */
   .hero-bg-layers {
     position: absolute; inset: 0;
     pointer-events: none;
     overflow: hidden;
   }
-  /* Atmospheric photo behind hero, fills the full width with a soft fade
-     on the far left for headline legibility. Drifts slowly with parallax. */
+  /* Atmospheric photo behind hero, anchored to the right; faded to charcoal
+     on the left so the headline stays legible. Drifts slowly with parallax. */
   .hero-bg-photo {
     position: absolute;
     top: 0;
     right: 0;
-    width: 100%;
+    width: 75%;
     height: 110%;
     background-image: url("assets/hero.png");
     background-repeat: no-repeat;
     background-position: right center;
     background-size: cover;
-    opacity: 0.85;
-    /* Soft fade on the far left edge only, gentle top/bottom vignette */
+    opacity: 0.55;
+    /* Fade left edge to fully transparent, top/bottom slight vignette */
     -webkit-mask-image:
-      linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 15%, #000 35%, #000 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, #000 8%, #000 92%, rgba(0,0,0,0.4) 100%);
+      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.6) 15%, #000 35%, #000 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, #000 8%, #000 92%, rgba(0,0,0,0.4) 100%);
+      linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.4) 25%, #000 60%, #000 100%),
+      linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
     mask-composite: intersect;
     will-change: transform;
   }
-  /* Soft wash above the photo — much lighter so the image breathes */
+  /* Dark wash sitting ABOVE the photo to dim it further and unify color temp */
   .hero-bg-photo::after {
     content: '';
     position: absolute; inset: 0;
     background:
       linear-gradient(90deg,
-        rgba(28, 29, 31, 0.65) 0%,
-        rgba(28, 29, 31, 0.45) 18%,
-        rgba(28, 29, 31, 0.2) 45%,
-        rgba(28, 29, 31, 0.05) 75%,
-        rgba(28, 29, 31, 0.1) 100%),
+        rgba(28, 29, 31, 1) 0%,
+        rgba(28, 29, 31, 0.92) 18%,
+        rgba(28, 29, 31, 0.55) 45%,
+        rgba(28, 29, 31, 0.25) 75%,
+        rgba(28, 29, 31, 0.4) 100%),
       linear-gradient(180deg,
-        rgba(28, 29, 31, 0.15) 0%,
-        rgba(28, 29, 31, 0) 25%,
-        rgba(28, 29, 31, 0) 75%,
-        rgba(28, 29, 31, 0.3) 100%);
+        rgba(28, 29, 31, 0.3) 0%,
+        rgba(28, 29, 31, 0.05) 30%,
+        rgba(28, 29, 31, 0.05) 70%,
+        rgba(28, 29, 31, 0.45) 100%);
   }
-  /* Mobile: full-width photo with stronger vertical wash for headline legibility */
+  /* On narrow screens, fade more aggressively and shrink the photo so it
+     doesn't compete with the headline. */
   @media (max-width: 720px) {
     .hero-bg-photo {
       width: 100%;
-      opacity: 0.85;
+      opacity: 0.55;
     }
     .hero-bg-photo::after {
       background:
         linear-gradient(180deg,
-          rgba(28, 29, 31, 0.15) 0%,
-          rgba(28, 29, 31, 0.3) 50%,
-          rgba(28, 29, 31, 0.55) 100%);
+          rgba(28, 29, 31, 0.3) 0%,
+          rgba(28, 29, 31, 0.45) 50%,
+          rgba(28, 29, 31, 0.75) 100%);
     }
   }
 
@@ -1175,8 +1177,8 @@
       </a>
       <nav>
         <ul>
-          <li><a href="#work">Work</a></li>
           <li><a href="#products">Products</a></li>
+          <li><a href="#work">Work</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -1202,14 +1204,14 @@
       <div class="reveal reveal-1 hero-eyebrow" data-parallax="-0.1">Everyday products, designed with purpose.</div>
 
       <h1 class="reveal reveal-2" data-parallax="-0.05">
-        From sketch<br>
-        to <span class="accent">shelf.</span><br>
-        For clients,<br>
-        and my own <span class="stroke">brand.</span>
+        I <span class="accent">ship</span><br>
+        products.<br>
+        Mine, and<br>
+        <span class="stroke">yours.</span>
       </h1>
 
       <p class="hero-lede reveal reveal-3" data-parallax="-0.03">
-        Paulégoné is the contract design and engineering practice of Paul Skelton — twenty-two years of design, engineering, and manufacturing experience across consumer electronics, sporting goods, agriculture, and medical accessories. I don't just hand off CAD files. I ship.
+        Paulégoné is a product development company — design, engineering, manufacturing, and the parts most designers don't touch. Twenty-two years across consumer electronics, sporting goods, agriculture, and medical accessories. I ship products under my own brand, and I take on contract work for others doing the same.
       </p>
 
       <div class="hero-meta reveal reveal-4">
@@ -1233,16 +1235,74 @@
     </div>
   </section>
 
+  <!-- PRODUCTS -->
+  <section id="products" class="products-section">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-num-wrap">
+          <div class="section-num scroll-fade">01 / Products</div>
+        </div>
+        <div>
+          <h2 class="section-title scroll-fade">Built and shipped <span class="accent">under my own brand.</span></h2>
+          <p class="section-intro scroll-fade">I don't only design products for clients. I invent, engineer, manufacture, sell, and support my own — the same playbook, with my own skin in the game. It's the difference between a designer who hands off files and a partner who knows what happens after he leaves the building.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-products">
+
+      <article class="hero-product" data-status="shipping">
+        <div class="hero-product-image">
+          <img src="assets/product-softcrutch.jpg" alt="SoftCrutch crutch accessory kit" loading="lazy">
+        </div>
+        <div class="hero-product-content">
+          <div class="container">
+            <div class="hero-product-inner">
+              <span class="product-status">● Shipping</span>
+              <h3 class="hero-product-title">SoftCrutch</h3>
+              <p class="hero-product-tagline">A crutch accessory kit, end-to-end.</p>
+              <p class="hero-product-desc">Converts standard underarm and forearm crutches into a more comfortable, lower-pressure mobility experience. Designed, engineered, sourced, and brought to market end-to-end by me. Patent pending. Live on Amazon, with a growing base of clinical-user testimonials.</p>
+              <div class="hero-product-actions">
+                <a href="https://softcrutch.com" class="hero-product-link primary" target="_blank" rel="noopener">Visit softcrutch.com →</a>
+                <span class="hero-product-meta">Live · Amazon &amp; D2C</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="hero-product" data-status="development">
+        <div class="hero-product-image">
+          <img src="assets/product-yumekeki.jpg" alt="YumeKeki fillable cupcake mold system" loading="lazy">
+        </div>
+        <div class="hero-product-content">
+          <div class="container">
+            <div class="hero-product-inner">
+              <span class="product-status">○ In Development</span>
+              <h3 class="hero-product-title">YumeKeki</h3>
+              <p class="hero-product-tagline">Fillable cupcake molds, validated before tooled.</p>
+              <p class="hero-product-desc">A fillable cupcake mold system for home bakers and creators. Currently in market validation using AI-generated content marketing before I commit to manufacturing — a deliberate, low-capital approach to demand discovery before tooling.</p>
+              <div class="hero-product-actions">
+                <span class="hero-product-meta">In Validation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
   <!-- WORK -->
   <section id="work">
     <div class="container">
       <div class="section-head">
         <div class="section-num-wrap">
-          <div class="section-num scroll-fade">01 / Work</div>
+          <div class="section-num scroll-fade">02 / Work</div>
         </div>
         <div>
-          <h2 class="section-title scroll-fade"><span class="accent">Shipped</span> products.</h2>
-          <p class="section-intro scroll-fade">Four selected from a longer career, each chosen to demonstrate a distinct capability — from concept-to-shelf appliance work, to flagship consumer electronics, to sole-contributor execution at scale. Most are still on shelves today.</p>
+          <h2 class="section-title scroll-fade">Shipped <span class="accent">for others.</span></h2>
+          <p class="section-intro scroll-fade">The same playbook, applied to other people's brands. Four selected from a longer career, each chosen to demonstrate a distinct capability — from concept-to-shelf appliance work, to flagship consumer electronics, to sole-contributor execution at scale. Most are still on shelves today.</p>
         </div>
       </div>
 
@@ -1301,64 +1361,6 @@
         </article>
 
       </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTS -->
-  <section id="products" class="products-section">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-num-wrap">
-          <div class="section-num scroll-fade">02 / Products</div>
-        </div>
-        <div>
-          <h2 class="section-title scroll-fade">Built and shipped <span class="accent">under my own brand.</span></h2>
-          <p class="section-intro scroll-fade">I don't only design products for clients. I invent, engineer, manufacture, sell, and support my own — the same playbook, with my own skin in the game. It's the difference between a designer who hands off files and a partner who knows what happens after he leaves the building.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-products">
-
-      <article class="hero-product" data-status="shipping">
-        <div class="hero-product-image">
-          <img src="assets/product-softcrutch.jpg" alt="SoftCrutch crutch accessory kit" loading="lazy">
-        </div>
-        <div class="hero-product-content">
-          <div class="container">
-            <div class="hero-product-inner">
-              <span class="product-status">● Shipping</span>
-              <h3 class="hero-product-title">SoftCrutch</h3>
-              <p class="hero-product-tagline">A crutch accessory kit, end-to-end.</p>
-              <p class="hero-product-desc">Converts standard underarm and forearm crutches into a more comfortable, lower-pressure mobility experience. Designed, engineered, sourced, and brought to market end-to-end by me. Patent pending. Live on Amazon, with a growing base of clinical-user testimonials.</p>
-              <div class="hero-product-actions">
-                <a href="https://softcrutch.com" class="hero-product-link primary" target="_blank" rel="noopener">Visit softcrutch.com →</a>
-                <span class="hero-product-meta">Live · Amazon &amp; D2C</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="hero-product" data-status="development">
-        <div class="hero-product-image">
-          <img src="assets/product-yumekeki.jpg" alt="YumeKeki fillable cupcake mold system" loading="lazy">
-        </div>
-        <div class="hero-product-content">
-          <div class="container">
-            <div class="hero-product-inner">
-              <span class="product-status">○ In Development</span>
-              <h3 class="hero-product-title">YumeKeki</h3>
-              <p class="hero-product-tagline">Fillable cupcake molds, validated before tooled.</p>
-              <p class="hero-product-desc">A fillable cupcake mold system for home bakers and creators. Currently in market validation using AI-generated content marketing before I commit to manufacturing — a deliberate, low-capital approach to demand discovery before tooling.</p>
-              <div class="hero-product-actions">
-                <span class="hero-product-meta">In Validation</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-
     </div>
   </section>
 
@@ -1425,9 +1427,9 @@
         </div>
 
         <div class="about-body">
-          <p>Paulégoné is the contract design and engineering practice of Paul Skelton — a 22-year industrial designer and product engineer who has worked across corporate, agency, startup, and freelance, in nearly every role on the product development chain.</p>
-          <p>The positioning is unusual on purpose: most contract designers stop at CAD. I take products through manufacturing, supplier coordination, and — for my own brands — into retail, advertising, and customer support. That arc is the work, and I know which decisions early in design will cost or save money in production three years later.</p>
-          <p>For my own brands, I use the same discipline. SoftCrutch is shipping. YumeKeki is in validation. Other product concepts are at varying stages, and the pipeline informs the contract work in both directions.</p>
+          <p>Paulégoné is a product development company built around Paul Skelton — a 22-year industrial designer and product engineer who has worked across corporate, agency, startup, and freelance, in nearly every role on the product development chain.</p>
+          <p>The positioning is unusual on purpose: most product designers stop at CAD. I take products all the way through manufacturing, supplier coordination, and — for my own brands — into retail, advertising, and customer support. That whole arc is the work, and I know which decisions early in design will cost or save money in production three years later.</p>
+          <p>SoftCrutch is shipping. YumeKeki is in validation. Other product concepts are at varying stages. The pipeline informs the contract work in both directions: I bring the discipline of running my own retail to client engagements, and what I learn from clients sharpens what I build under my own brand.</p>
           <p>For my full employment history and traditional résumé, visit <a href="https://pauleskelton.com" target="_blank" rel="noopener">pauleskelton.com</a>.</p>
         </div>
       </div>
